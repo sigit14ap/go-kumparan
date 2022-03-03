@@ -12,13 +12,13 @@ import (
 func (h *Handler) initArticleRoutes(api *gin.RouterGroup) {
 	article := api.Group("/article")
 	{
-		article.GET("/", h.getArticle)
-		article.POST("/", h.createArticle)
-		article.GET("/:id", h.detailArticle)
+		article.GET("/", h.GetArticle)
+		article.POST("/", h.CreateArticle)
+		article.GET("/:id", h.DetailArticle)
 	}
 }
 
-func (h *Handler) getArticle(context *gin.Context) {
+func (h *Handler) GetArticle(context *gin.Context) {
 	var input dto.SearchArticleDTO
 
 	authorQuery, ok := context.GetQuery("author")
@@ -41,9 +41,10 @@ func (h *Handler) getArticle(context *gin.Context) {
 	}
 
 	services.SuccessResponse(context, data)
+	return
 }
 
-func (h *Handler) createArticle(context *gin.Context) {
+func (h *Handler) CreateArticle(context *gin.Context) {
 	var input dto.ArticleInput
 	_ = context.ShouldBindJSON(&input)
 
@@ -68,7 +69,7 @@ func (h *Handler) createArticle(context *gin.Context) {
 	services.CreatedResponse(context, data)
 }
 
-func (h *Handler) detailArticle(context *gin.Context) {
+func (h *Handler) DetailArticle(context *gin.Context) {
 
 	articleID, err := services.GetIdFromPath(context, "id")
 
@@ -78,7 +79,7 @@ func (h *Handler) detailArticle(context *gin.Context) {
 	}
 
 	article, err := h.services.Articles.Find(context.Request.Context(), articleID)
-	
+
 	if err != nil {
 		services.ErrorResponse(context, http.StatusInternalServerError, err.Error())
 		return

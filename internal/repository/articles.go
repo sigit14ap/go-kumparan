@@ -16,7 +16,7 @@ type ArticlesRepo struct {
 	db *mongo.Collection
 }
 
-func (repo ArticlesRepo) Get(ctx context.Context, query dto.SearchArticleDTO) ([]domain.Article, error) {
+func (repo *ArticlesRepo) Get(ctx context.Context, query dto.SearchArticleDTO) ([]domain.Article, error) {
 	searchQuery := bson.D{}
 
 	if query.Author != "" {

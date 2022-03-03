@@ -20,12 +20,21 @@ func (h *Handler) Init() *gin.Engine {
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.New()
 
-	h.initAPI(router)
+	//h.InitAPI(router)
+
+	handlerV1 := v1.NewHandler(h.services)
+
+	api := router.Group("/api/v1")
+	{
+		api.GET("/article", handlerV1.GetArticle)
+		api.POST("/article", handlerV1.CreateArticle)
+		api.GET("/article/:id", handlerV1.DetailArticle)
+	}
 
 	return router
 }
 
-func (h *Handler) initAPI(router *gin.Engine) {
+func (h *Handler) InitAPI(router *gin.Engine) {
 	handlerV1 := v1.NewHandler(h.services)
 	api := router.Group("/api")
 	{

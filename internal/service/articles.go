@@ -23,7 +23,7 @@ func (service *ArticlesService) Get(ctx context.Context, query dto.SearchArticle
 func (service *ArticlesService) Find(ctx context.Context, articleID primitive.ObjectID) (domain.Article, error) {
 	var article domain.Article
 	cachedArticle, err := service.redisClient.Get(articleID.Hex()).Result()
-	
+
 	if err != nil {
 		article, err = service.repo.Find(ctx, articleID)
 	} else {
