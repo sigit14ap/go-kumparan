@@ -1,8 +1,12 @@
 package app
 
 import (
+	"context"
 	"fmt"
-	"github.com/sigit14ap/go-kumparan/internal/domain"
+	"github.com/sigit14ap/go-kumparan/internal/repository"
+	"github.com/sigit14ap/go-kumparan/internal/service"
+	"github.com/sigit14ap/go-kumparan/pkg/database/mongodb"
+	"github.com/sigit14ap/go-kumparan/pkg/database/redis"
 	"net/http"
 	"time"
 
@@ -12,14 +16,35 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func Run(configPath string, command domain.Command) {
+func Run(configPath string) {
 	log.Info("Application start ...")
 	log.Info("Logger initialized ...")
 
 	cfg := config.GetConfig(configPath)
 	log.Info("Config created ...")
 
-	handlers := delivery.NewHandler()
+	mongoClient, err := mongodb.NewClient(context.Background(), cfg)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Info("Mongodb connected ...")
+	db := mongoClient.Database(cfg.DB.Database)
+
+	redisClient, err := redis.NewClient(cfg)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Info("Redis connected ...")
+
+	repos := repository.NewRepositories(db)
+	services := service.NewServices(service.Deps{
+		Repos:       repos,
+		RedisClient: redisClient,
+	})
+
+	handlers := delivery.NewHandler(services)
 	log.Info("Services, repositories and handlers initialized")
 
 	server := &http.Server{

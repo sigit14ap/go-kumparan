@@ -2,6 +2,8 @@ package v1
 
 import (
 	"fmt"
+	"github.com/go-playground/validator/v10"
+	"github.com/sigit14ap/go-kumparan/internal/service"
 	"math"
 	"net/http"
 	"time"
@@ -10,18 +12,23 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+var validate *validator.Validate = validator.New()
+
 type Handler struct {
+	services *service.Services
 }
 
-func NewHandler() *Handler {
-	return &Handler{}
+func NewHandler(services *service.Services) *Handler {
+	return &Handler{
+		services: services,
+	}
 }
 
 func (h *Handler) Init(api *gin.RouterGroup) {
 	v1 := api.Group("/v1")
 	v1.Use(LoggerMiddleware())
 	{
-		h.initBackendRoutes(v1)
+		h.initArticleRoutes(v1)
 	}
 }
 
