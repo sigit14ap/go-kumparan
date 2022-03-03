@@ -14,6 +14,7 @@ func (h *Handler) initArticleRoutes(api *gin.RouterGroup) {
 	{
 		article.GET("/", h.getArticle)
 		article.POST("/", h.createArticle)
+		article.GET("/:id", h.detailArticle)
 	}
 }
 
@@ -65,4 +66,23 @@ func (h *Handler) createArticle(context *gin.Context) {
 	}
 
 	services.CreatedResponse(context, data)
+}
+
+func (h *Handler) detailArticle(context *gin.Context) {
+
+	articleID, err := services.GetIdFromPath(context, "id")
+
+	if err != nil {
+		services.ErrorResponse(context, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	article, err := h.services.Articles.Find(context.Request.Context(), articleID)
+	
+	if err != nil {
+		services.ErrorResponse(context, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	services.SuccessResponse(context, article)
 }

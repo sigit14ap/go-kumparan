@@ -7,7 +7,7 @@ import (
 )
 
 type success struct {
-	Data    interface{} `json:"services"`
+	Data    interface{} `json:"data"`
 	Message string      `json:"message"`
 }
 

@@ -34,33 +34,7 @@ func (repo ArticlesRepo) Get(ctx context.Context, query dto.SearchArticleDTO) ([
 			},
 		})
 
-		//searchQuery = append(searchQuery, bson.E{
-		//	"title", bson.M{"$regex": query.Search, "$options": "im"},
-		//})
 	}
-
-	//, {
-	//	"$and", []interface{}{bson.M{
-	//		"title": query.Search,
-	//		"$or": bson.A{
-	//			bson.M{"body": query.Search},
-	//		},
-	//	}},
-	//}
-
-	//if query.Author != "" {
-	//	searchQuery = append(searchQuery, bson.E{{"author", bson.M{"$regex": query.Author, "$options": "im"}}})
-	//}
-	//
-	//if query.Search != "" {
-	//	searchQuery["search"] = bson.M{
-	//		"title": 10,
-	//		"$or": bson.A{
-	//			bson.M{"s": 30},
-	//			bson.M{"a": 10},
-	//		},
-	//	}
-	//}
 
 	findOptions := options.Find().SetSort(bson.D{{"created", -1}})
 
@@ -72,6 +46,15 @@ func (repo ArticlesRepo) Get(ctx context.Context, query dto.SearchArticleDTO) ([
 	data := []domain.Article{}
 	err = cursor.All(ctx, &data)
 	return data, err
+}
+
+func (repo *ArticlesRepo) Find(ctx context.Context, articleID primitive.ObjectID) (domain.Article, error) {
+	result := repo.db.FindOne(ctx, bson.M{"_id": articleID})
+
+	var article domain.Article
+	err := result.Decode(&article)
+
+	return article, err
 }
 
 func (repo *ArticlesRepo) Create(ctx context.Context, article dto.ArticleDTO) (domain.Article, error) {

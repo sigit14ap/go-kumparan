@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"github.com/go-redis/redis/v7"
 	"github.com/sigit14ap/go-kumparan/internal/domain"
@@ -11,6 +12,7 @@ import (
 
 type Articles interface {
 	Get(ctx context.Context, query dto.SearchArticleDTO) ([]domain.Article, error)
+	Find(ctx context.Context, articleID primitive.ObjectID) (domain.Article, error)
 	Create(ctx context.Context, article dto.ArticleDTO) (domain.Article, error)
 }
 
@@ -25,7 +27,7 @@ type Deps struct {
 }
 
 func NewServices(deps Deps) *Services {
-	articlesService := NewArticlesService(deps.Repos.Articles)
+	articlesService := NewArticlesService(deps.Repos.Articles, deps.RedisClient)
 
 	return &Services{
 		Articles: articlesService,
