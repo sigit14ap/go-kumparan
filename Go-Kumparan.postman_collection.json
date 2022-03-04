@@ -1,0 +1,107 @@
+{
+	"info": {
+		"_postman_id": "80115f0b-d4d1-4533-9c33-708ea380843b",
+		"name": "Go-Kumparan",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "List Article",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/article?author=kumparan&search=konten",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"article"
+					],
+					"query": [
+						{
+							"key": "author",
+							"value": "kumparan"
+						},
+						{
+							"key": "search",
+							"value": "konten"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Detail Article",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/article/62224453813812c481ec62dc",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"article",
+						"62224453813812c481ec62dc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Article",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"author\": \"kumparan 123\",\r\n    \"title\": \"test 123123\",\r\n    \"body\": \"aaaaa bbbb\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/article",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"article"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "localhost:8080/api/v1",
+			"type": "string"
+		}
+	]
+}

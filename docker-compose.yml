@@ -1,0 +1,38 @@
+version: '3.7'
+services:
+  go-kumparan:
+    build: .
+    container_name: go_kumparan
+    depends_on:
+      - 'mongo'
+      - 'redis'
+    environment:
+      - PORT=8080
+    ports:
+      - '8080:8080'
+    volumes:
+      - '.:/opt/go-kumparan:cached'
+  # MongoDB
+  mongo:
+    image: 'mongo:4.2.6-bionic'
+    container_name: mongo
+    ports:
+      - '27017:27017'
+    volumes:
+      - ./mongodata:/data/db
+    restart: always
+  # Mongo Express Web-based MongoDB admin interface
+  mongo_express:
+    image: mongo-express
+    container_name: mongo_express
+    depends_on:
+      - 'mongo'
+    ports:
+      - '8081:8081'
+    restart: always
+  # Redis
+  redis:
+    image: "redis:alpine"
+    container_name: redis
+    ports:
+      - "6379:6379"

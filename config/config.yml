@@ -1,13 +1,13 @@
 listen:
   type:
-  bind_ip: localhost
+  bind_ip: go_kumparan
   port: 8080
 db:
-  uri: mongodb://localhost:27017
+  uri: mongodb://mongo:27017
   database: go-kumparan
 jwt:
   secret: jtwSecret
   accessTokenTime: 300000 #15 minutes
   refreshTokenTimes: 86400 #60 days
 redis:
-  uri: localhost:6379
+  uri: redis:6379
