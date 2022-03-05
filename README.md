@@ -19,3 +19,8 @@ How to run
 ```bash
   http://localhost:8081
 ```
+
+- Run Unit Test
+```bash
+  cd tests && go test
+```
